@@ -1,0 +1,24 @@
+PODS:
+  - Alamofire (4.2.0)
+  - SwiftMQTT (3.0.1)
+  - SwiftyPlistManager (1.0.2)
+
+DEPENDENCIES:
+  - Alamofire (= 4.2)
+  - SwiftMQTT
+  - SwiftyPlistManager
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - SwiftMQTT
+    - SwiftyPlistManager
+
+SPEC CHECKSUMS:
+  Alamofire: aa2e09d871c9160ac53c90e83c68064a94e3dfbe
+  SwiftMQTT: 983eeb29e8c8173ed953e0238d2f99b79ff3ccd2
+  SwiftyPlistManager: 5895924cccb7fe28deccbe14890e8aed78ae78ae
+
+PODFILE CHECKSUM: bb4a771c5924bf55d2074bbcf0dd43e08427cd74
+
+COCOAPODS: 1.6.0.beta.2
