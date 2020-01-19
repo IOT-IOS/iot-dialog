@@ -8,6 +8,8 @@ class HomeViewController: UIViewController {
     var dialog = [DialogTableView]()
     var dateManager: DateManager = DateManager()
     var mqttManager: MqttManager = MqttManager()
+    var requestManager: RequestManager = RequestManager()
+    private var api: Api = Api()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,13 +54,17 @@ extension HomeViewController: WCSessionDelegate {
     }
     
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
-        print(userInfo)
         guard let textResponse = userInfo["interactText"] as? String else { return }
         guard let creationDate = userInfo["creationDate"] as? String else { return }
         self.dialog.append(DialogTableView(textResponse: textResponse, creationDate: creationDate))
         DispatchQueue.main.async {
             self.dialogTableView.reloadData()
         }
+        self.requestManager.postDialog("\(api.url)history/talk", data: [
+            "name": textResponse,
+            "creationDate": creationDate,
+            "device": "Smartwatch"
+        ])
     }
     
     func sessionDidBecomeInactive(_ session: WCSession) {}
@@ -88,10 +94,16 @@ extension HomeViewController: UITableViewDelegate {
 }
 
 extension HomeViewController: MqttProtocolDelegate {
-    func transferReceiveMessage(data: String) {
-        self.dialog.append(DialogTableView(textResponse: data.replacingOccurrences(of: "\"", with: ""), creationDate: self.dateManager.currentDate(format: "dd-MM-yyyy HH:mm")))
+    func transferReceiveMessage(name: String, creationDate: String) {
+        
+        self.dialog.append(DialogTableView(textResponse: name.replacingOccurrences(of: "\"", with: ""), creationDate: creationDate))
         DispatchQueue.main.async {
             self.dialogTableView.reloadData()
         }
+        self.requestManager.postDialog("\(api.url)history/talk", data: [
+            "name": name.replacingOccurrences(of: "\"", with: ""),
+            "creationDate": creationDate,
+            "device": "Google-Home"
+        ])
     }
 }

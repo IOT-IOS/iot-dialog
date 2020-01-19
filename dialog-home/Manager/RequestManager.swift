@@ -48,4 +48,20 @@ class RequestManager {
         }
         task.resume()
     }
+    
+    func postDialog(_ url: String, data: [String: Any]) {
+        let parameters: [String: Any] = [
+            "name": data["name"] ?? "",
+            "creation_date": data["creationDate"] ?? "",
+            "device": data["device"] ?? ""
+        ]
+        
+        self.sessionManager.request(url,method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: [:])
+            .responseJSON {response in
+                switch response.result {
+                    case .failure(let error): print(error)
+                    case .success(let json): print(json)
+                }
+            }
+    }
 }

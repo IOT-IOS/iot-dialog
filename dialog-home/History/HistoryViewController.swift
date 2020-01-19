@@ -21,7 +21,7 @@ class HistoryViewController: UIViewController {
     
     private func getHistory(device: String = "") {
         var query: String = ""
-        if(!device.isEmpty) {
+        if(!device.isEmpty && device != "All") {
             query = "?device=\(device)"
         }
         self.requestManager.getHistory(url: "\(api.url)history/talks\(query)", completion: { result in
@@ -53,7 +53,6 @@ extension HistoryViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("ss")
         let cell = tableView.dequeueReusableCell(withIdentifier: "History", for: indexPath) as! HistoryTableViewCell
         let row = self.history[indexPath.row]
         if let history = row as? HistoryTableView {
