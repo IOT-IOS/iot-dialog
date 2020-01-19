@@ -1,5 +1,5 @@
 import Foundation
 
 protocol MqttProtocolDelegate {
-    func transferReceiveMessage(data: String)
+    func transferReceiveMessage(name: String, creationDate: String)
 }

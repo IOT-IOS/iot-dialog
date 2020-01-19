@@ -5,6 +5,7 @@ import SwiftyPlistManager
 class MqttManager {
     var mqtt: MQTTSession!
     var delegate: MqttProtocolDelegate?
+    var dateManager: DateManager = DateManager()
     
     init() {
         self.initMqtt()
@@ -61,7 +62,8 @@ extension MqttManager: MQTTSessionDelegate {
         guard let mqttMessage = message.stringRepresentation else { return }
         guard let data = mqttMessage.data(using: String.Encoding.utf8) else { return }
         let text: String = String(decoding: data, as: UTF8.self)
-        delegate?.transferReceiveMessage(data: text)
+        let creationDate: String = self.dateManager.currentDate(format: "dd-MM-yyyy HH:mm")
+        delegate?.transferReceiveMessage(name: text, creationDate: creationDate)
     }
     
     func mqttDidAcknowledgePing(from session: MQTTSession) {}

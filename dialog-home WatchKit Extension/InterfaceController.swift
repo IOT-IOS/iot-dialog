@@ -42,7 +42,7 @@ class InterfaceController: WKInterfaceController {
     @IBAction func launchCommand() {
         self.presentTextInputController(withSuggestions: ["Parler avec home.musique", "Joue", "rock", "Joue de la musique électro"], allowedInputMode: .plain, completion: { (res) in
             if let sendText = res?.first {
-                self.requestManager.getRequest(url: "https://iot-ios.herokuapp.com/action/dialog?action=\(sendText)", completion: { result in
+                self.requestManager.getDialog(url: "https://iot-ios.herokuapp.com/action/dialog?action=\(sendText)", completion: { result in
                     switch result {
                     case .failure(let error):
                         print(error)

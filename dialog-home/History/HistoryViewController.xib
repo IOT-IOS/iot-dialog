@@ -1,20 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HistoryViewController" customModule="dialog_home" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HistoryViewController" customModule="dialog_home" customModuleProvider="target">
+            <connections>
+                <outlet property="historyTableView" destination="tWK-PF-fFe" id="MvU-jb-ZEE"/>
+                <outlet property="view" destination="7AY-iu-ns8" id="udo-mh-B3L"/>
+            </connections>
+        </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="7AY-iu-ns8">
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="j6R-Y4-V2c">
+                    <rect key="frame" x="40" y="51" width="302" height="29"/>
+                    <segments>
+                        <segment title="All"/>
+                        <segment title="Google-Home"/>
+                        <segment title="Smartwatch"/>
+                    </segments>
+                    <connections>
+                        <action selector="choicheSelected:" destination="-1" eventType="valueChanged" id="gAm-wZ-EXY"/>
+                    </connections>
+                </segmentedControl>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="tWK-PF-fFe">
+                    <rect key="frame" x="0.0" y="115" width="375" height="552"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </tableView>
+            </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="lpU-fq-HhO" firstAttribute="trailing" secondItem="j6R-Y4-V2c" secondAttribute="trailing" constant="33" id="CmY-Ow-2UN"/>
+                <constraint firstItem="j6R-Y4-V2c" firstAttribute="top" secondItem="lpU-fq-HhO" secondAttribute="top" constant="31" id="FMx-7r-bX0"/>
+                <constraint firstItem="tWK-PF-fFe" firstAttribute="top" secondItem="j6R-Y4-V2c" secondAttribute="bottom" constant="36" id="YL5-XG-wWR"/>
+                <constraint firstItem="tWK-PF-fFe" firstAttribute="leading" secondItem="lpU-fq-HhO" secondAttribute="leading" id="ZlE-t7-nm7"/>
+                <constraint firstItem="tWK-PF-fFe" firstAttribute="bottom" secondItem="lpU-fq-HhO" secondAttribute="bottom" id="iTe-Bj-c6e"/>
+                <constraint firstItem="tWK-PF-fFe" firstAttribute="trailing" secondItem="lpU-fq-HhO" secondAttribute="trailing" id="l4p-Qr-uIr"/>
+                <constraint firstItem="j6R-Y4-V2c" firstAttribute="leading" secondItem="lpU-fq-HhO" secondAttribute="leading" constant="40" id="qBB-a3-PSa"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="lpU-fq-HhO"/>
+            <point key="canvasLocation" x="138.40000000000001" y="129.98500749625188"/>
         </view>
     </objects>
 </document>

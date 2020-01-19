@@ -15,7 +15,7 @@ class RequestManager {
         self.sessionManager = Alamofire.SessionManager(configuration: configuration)
     }
     
-    func getRequest(url: String, completion: @escaping (Result<[String: Any]>) -> Void) {
+    func getDialog(url: String, completion: @escaping (Result<[String: Any]>) -> Void) {
         let task = self.sessionManager.request(url, method: .get, encoding: JSONEncoding.default)
             .responseJSON { response in
                 switch(response.result) {
@@ -31,5 +31,37 @@ class RequestManager {
                 }
         }
         task.resume()
+    }
+    
+    func getHistory(url: String, completion: @escaping (Result<[[String: Any]]>) -> Void) {
+        let task = self.sessionManager.request(url, method: .get, encoding: JSONEncoding.default)
+            .responseJSON { response in
+                switch(response.result) {
+                case .success(let json):
+                    guard let data = json as? [[String: Any]] else { return }
+                    completion(.success(data))
+                    break
+                case .failure(let error):
+                    completion(.failure(error))
+                    break
+                }
+        }
+        task.resume()
+    }
+    
+    func postDialog(_ url: String, data: [String: Any]) {
+        let parameters: [String: Any] = [
+            "name": data["name"] ?? "",
+            "creation_date": data["creationDate"] ?? "",
+            "device": data["device"] ?? ""
+        ]
+        
+        self.sessionManager.request(url,method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: [:])
+            .responseJSON {response in
+                switch response.result {
+                    case .failure(let error): print(error)
+                    case .success(let json): print(json)
+                }
+            }
     }
 }
