@@ -8,6 +8,7 @@ class HomeViewController: UIViewController {
     var dialog = [DialogTableView]()
     var dateManager: DateManager = DateManager()
     var mqttManager: MqttManager = MqttManager()
+    var watchSessionManager: WatchSessionManager = WatchSessionManager()
     var requestManager: RequestManager = RequestManager()
     private var api: Api = Api()
 
@@ -15,61 +16,20 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         self.navigationController?.isNavigationBarHidden = true
         self.navigationController?.setNavigationBarHidden(true, animated: true)
-        self.initSession()
         self.initTableView()
         self.dialogTableView.separatorInset =  UIEdgeInsets.zero
         self.mqttManager.delegate = self
+        self.watchSessionManager.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        guard WCSession.isSupported(),
-            WCSession.default.activationState == .activated,
-            WCSession.default.isPaired,
-            WCSession.default.isWatchAppInstalled
-            else { return }
-    }
-    
-    private func initSession() {
-        session?.delegate = self
-        session?.activate()
+        self.watchSessionManager.initOptionsSession()
     }
     
     private func initTableView() {
         self.dialogTableView.register(UINib(nibName: "DialogTableViewCell", bundle: nil), forCellReuseIdentifier: "Dialog")
-        self.dialogTableView.delegate = self
         self.dialogTableView.dataSource = self
     }
-}
-
-extension HomeViewController: WCSessionDelegate {
-    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-        switch activationState {
-        case .activated:
-            print("WCS activated")
-        case .notActivated:
-            print("WCS not activated")
-        case .inactive:
-            print("WCS inactive")
-        }
-    }
-    
-    func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
-        guard let textResponse = userInfo["interactText"] as? String else { return }
-        guard let creationDate = userInfo["creationDate"] as? String else { return }
-        self.dialog.append(DialogTableView(textResponse: textResponse, creationDate: creationDate))
-        DispatchQueue.main.async {
-            self.dialogTableView.reloadData()
-        }
-        self.requestManager.postDialog("\(api.url)history/talk", data: [
-            "name": textResponse,
-            "creationDate": creationDate,
-            "device": "Smartwatch"
-        ])
-    }
-    
-    func sessionDidBecomeInactive(_ session: WCSession) {}
-    
-    func sessionDidDeactivate(_ session: WCSession) {}
 }
 
 extension HomeViewController: UITableViewDataSource {
@@ -81,7 +41,6 @@ extension HomeViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Dialog", for: indexPath) as! DialogTableViewCell
         let row = self.dialog[indexPath.row]
         if let dialog = row as? DialogTableView {
-            print(dialog)
             cell.backgroundColor = UIColor.white
             cell.draw(dialog: dialog)
         }
@@ -89,13 +48,22 @@ extension HomeViewController: UITableViewDataSource {
     }
 }
 
-extension HomeViewController: UITableViewDelegate {
-    
+extension HomeViewController: WatchSessionProtocolDelegate {
+    func transferDataReceive(interactText: String, creationDate: String) {
+        self.dialog.append(DialogTableView(textResponse: interactText, creationDate: creationDate))
+        DispatchQueue.main.async {
+            self.dialogTableView.reloadData()
+        }
+        self.requestManager.postDialog("\(api.url)history/talk", data: [
+            "name": interactText,
+            "creationDate": creationDate,
+            "device": "Smartwatch"
+        ])
+    }
 }
 
 extension HomeViewController: MqttProtocolDelegate {
     func transferReceiveMessage(name: String, creationDate: String) {
-        
         self.dialog.append(DialogTableView(textResponse: name.replacingOccurrences(of: "\"", with: ""), creationDate: creationDate))
         DispatchQueue.main.async {
             self.dialogTableView.reloadData()

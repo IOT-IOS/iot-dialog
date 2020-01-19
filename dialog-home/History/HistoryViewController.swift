@@ -20,11 +20,7 @@ class HistoryViewController: UIViewController {
     }
     
     private func getHistory(device: String = "") {
-        var query: String = ""
-        if(!device.isEmpty && device != "All") {
-            query = "?device=\(device)"
-        }
-        self.requestManager.getHistory(url: "\(api.url)history/talks\(query)", completion: { result in
+        self.requestManager.getHistory(url: "\(api.url)history/talks?device=\(device)", completion: { result in
             switch result {
                 case .failure(let error): print(error)
                 case .success(let value):
@@ -54,11 +50,9 @@ extension HistoryViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "History", for: indexPath) as! HistoryTableViewCell
-        let row = self.history[indexPath.row]
-        if let history = row as? HistoryTableView {
-            cell.backgroundColor = UIColor.white
-            cell.draw(history: history)
-        }
+        let historyRow = self.history[indexPath.row]
+        cell.backgroundColor = UIColor.white
+        cell.draw(history: historyRow)
         return cell
     }
 }
