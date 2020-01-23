@@ -3,7 +3,11 @@ import WatchConnectivity
 
 class WatchSessionManager: NSObject {
     private let session: WCSession? = WCSession.isSupported() ? WCSession.default : nil
-    public var delegate: WatchSessionProtocolDelegate?
+    #if os(iOS)
+    public var delegate: WatchSessionProtocolPhoneDelegate?
+    #else
+    public var delegate: WatchSessionProtocolWatchDelegate?
+    #endif
     
     override init() {
         super.init()
@@ -16,11 +20,17 @@ class WatchSessionManager: NSObject {
     }
     
     public func initOptionsSession() {
+        #if os(iOS)
         guard WCSession.isSupported(),
             WCSession.default.activationState == .activated,
             WCSession.default.isPaired,
             WCSession.default.isWatchAppInstalled
             else { return }
+        #else
+        guard WCSession.isSupported(),
+            WCSession.default.activationState == .activated
+            else { return }
+        #endif
     }
     
     public func sendSessionDatas(text: String, date: String) {
@@ -36,9 +46,10 @@ class WatchSessionManager: NSObject {
 }
 
 extension WatchSessionManager: WCSessionDelegate {
+    #if os(iOS)
     func sessionDidBecomeInactive(_ session: WCSession) {}
-    
     func sessionDidDeactivate(_ session: WCSession) {}
+    #endif
     
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         switch activationState {
@@ -54,6 +65,9 @@ extension WatchSessionManager: WCSessionDelegate {
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
         guard let textResponse = userInfo["interactText"] as? String else { return }
         guard let creationDate = userInfo["creationDate"] as? String else { return }
+         #if os(iOS)
         delegate?.transferDataReceive(interactText: textResponse, creationDate: creationDate)
+        #endif
     }
 }
+

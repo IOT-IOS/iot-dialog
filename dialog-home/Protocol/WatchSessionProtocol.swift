@@ -1,5 +1,5 @@
 import Foundation
 
-protocol WatchSessionProtocolDelegate {
+protocol WatchSessionProtocolPhoneDelegate {
     func transferDataReceive(interactText: String, creationDate: String)
 }
