@@ -1,42 +1,24 @@
 import WatchKit
 import Foundation
-import WatchConnectivity
 import Alamofire
 
 class InterfaceController: WKInterfaceController {
     @IBOutlet var interactText: WKInterfaceLabel!
-    private let session: WCSession? = WCSession.isSupported() ? WCSession.default : nil
     private var currentDate: String = ""
     private var requestManager: RequestManager = RequestManager()
     private var dateManager: DateManager = DateManager()
+    private var watchSessionManager: WatchSessionManager = WatchSessionManager()
     
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
-        self.initSession()
-        
-    }
-    
-    private func initSession() {
-        session?.delegate = self
-        session?.activate()
-    }
-    
-    private func sendSessionDatas(text: String, date: String) {
-        if WCSession.default.isReachable == true {
-            self.session?.transferUserInfo([
-                "interactText": text,
-                "creationDate": date
-            ])
-        } else {
-            print("Not reachable")
-        }
+        self.watchSessionManager.delegate = self
     }
     
     private func setValue(value: String) {
         let newText = String(describing: value)
         self.interactText.setText(newText)
         self.currentDate = self.dateManager.currentDate(format: "dd-MM-yyyy HH:mm")
-        self.sendSessionDatas(text: newText, date: self.currentDate)
+        self.watchSessionManager.sendSessionDatas(text: newText, date: self.currentDate)
     }
     
     @IBAction func launchCommand() {
@@ -72,17 +54,4 @@ class InterfaceController: WKInterfaceController {
 
 }
 
-extension InterfaceController: WCSessionDelegate {
-    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-        switch activationState {
-        case .activated:
-            print("WCS activated")
-        case .notActivated:
-            print("WCS not activated")
-        case .inactive:
-            print("WCS inactive")
-        }
-    }
-    
-    
-}
+extension InterfaceController: WatchSessionProtocolWatchDelegate {}

@@ -14,12 +14,18 @@ class HomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.isNavigationBarHidden = true
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
         self.initTableView()
         self.dialogTableView.separatorInset =  UIEdgeInsets.zero
         self.mqttManager.delegate = self
         self.watchSessionManager.delegate = self
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        navigationController?.navigationBar.barStyle = .black
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,7 +54,7 @@ extension HomeViewController: UITableViewDataSource {
     }
 }
 
-extension HomeViewController: WatchSessionProtocolDelegate {
+extension HomeViewController: WatchSessionProtocolPhoneDelegate {
     func transferDataReceive(interactText: String, creationDate: String) {
         self.dialog.append(DialogTableView(textResponse: interactText, creationDate: creationDate))
         DispatchQueue.main.async {

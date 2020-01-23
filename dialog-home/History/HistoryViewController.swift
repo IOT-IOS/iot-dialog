@@ -11,6 +11,7 @@ class HistoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initTableView()
+        self.historyTableView.separatorInset =  UIEdgeInsets.zero
         self.getHistory()
     }
     
@@ -52,6 +53,7 @@ extension HistoryViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "History", for: indexPath) as! HistoryTableViewCell
         let historyRow = self.history[indexPath.row]
         cell.backgroundColor = UIColor.white
+        cell.separatorInset = UIEdgeInsets.zero
         cell.draw(history: historyRow)
         return cell
     }

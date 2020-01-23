@@ -43,3 +43,6 @@ Podfile.lock
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+
+#Adafruit
+dialog-home/Adafruit.plist
