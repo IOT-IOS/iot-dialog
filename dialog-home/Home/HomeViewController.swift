@@ -77,7 +77,7 @@ extension HomeViewController: MqttProtocolDelegate {
         self.requestManager.postDialog("\(api.url)history/talk", data: [
             "name": name.replacingOccurrences(of: "\"", with: ""),
             "creationDate": creationDate,
-            "device": "Google-Home"
+            "device": "Google-Home",
         ])
     }
 }
