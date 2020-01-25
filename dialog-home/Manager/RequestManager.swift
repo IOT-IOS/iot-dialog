@@ -56,12 +56,26 @@ class RequestManager {
             "device": data["device"] ?? ""
         ]
         
-        self.sessionManager.request(url,method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: [:])
+        self.sessionManager.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: [:])
             .responseJSON {response in
                 switch response.result {
                     case .failure(let error): print(error)
                     case .success(let json): print(json)
                 }
             }
+    }
+    
+    func hideTalk(_ url: String, id: Int) {
+        let parameters: [String: Any] = [
+            "id": id
+        ]
+        
+        self.sessionManager.request(url, method: .patch, parameters: parameters, encoding: JSONEncoding.default, headers: [:])
+            .responseJSON {response in
+                switch response.result {
+                    case .failure(let error): print(error)
+                    case .success(let json): print(json)
+                }
+        }
     }
 }
