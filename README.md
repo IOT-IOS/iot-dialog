@@ -12,11 +12,11 @@ Permet de montrer une discussion interactive avec les objets connectés (apple w
 
 Permet de voir l'historique des conversations, avec possibilité de filtrage.
 
-### Protocoles utilisés
+## Protocoles utilisés
 
 Http, Mqtt
 
 
-### Outils utilisés
+## Outils utilisés
 
 WatchConnectivity, SwiftyPlistManager, SwiftMQTT, Alomafire
