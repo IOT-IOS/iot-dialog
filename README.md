@@ -1,6 +1,6 @@
 # iot-dialog
 
-Application servant à normalement lancer une musique depuis une apple watch ou un google home
+Application servant à lancer une musique depuis une apple watch ou un google home
 
 ## Fonctionnement
 
